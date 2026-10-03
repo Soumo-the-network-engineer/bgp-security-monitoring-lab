@@ -1,4 +1,4 @@
-# BGP Security Monitoring Lab — Annual Project / Research Report
+# BGP Security Monitoring Lab — Research Report
 
 **End-to-end detection of prefix hijacking and route leaks**
 
