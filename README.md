@@ -66,4 +66,4 @@ This repository is designed for public documentation. Do not commit real passwor
 
 ## Author
 
-Soumallya Das (Soumo)
+Soumallya Das
