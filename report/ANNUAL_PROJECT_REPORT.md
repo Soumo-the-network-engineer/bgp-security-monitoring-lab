@@ -1,10 +1,21 @@
-# BGP Security Monitoring Lab — Research Report
+# BGP Security Monitoring Lab — Project Report
 
-**End-to-end detection of prefix hijacking and route leaks**
+## End-to-End BGP Security Monitoring, Prefix Hijack Detection and Route-Leak Analysis
 
-Credentials, secrets and private passwords are intentionally redacted.
+| Project | BGP Security Monitoring Lab |
+|---|---|
+| Environment | EVE-NG / Cisco IOSv |
+| Monitoring Stack | Logstash · Elasticsearch · Kibana |
+| Time Synchronization | Chrony / NTP |
+| BGP Domains | AS100 · AS200 · AS300 |
+| Primary Security Tests | Prefix Hijacking · Route Leak |
+| Author | Soumallya Das |
 
-## Abstract
+> **Project status:** Successfully implemented and validated in a closed laboratory environment.
+
+
+
+## Executive Summary
 
 This project implements a closed EVE-NG laboratory for BGP security monitoring using Cisco IOSv, SSH-based BGP state collection, Logstash, Elasticsearch, Kibana and Chrony/NTP. The two primary detection scenarios are prefix hijacking and route leaks.
 
@@ -12,7 +23,7 @@ AS200 was used to inject the monitored prefix `100.100.100.0/24` while AS100 rem
 
 A second test used vIOS8 to compare the expected AS path `100` with an observed `200 100` path. The latter was continuously classified as `possible_route_leak`.
 
-## 1. Problem Definition
+## 1. Project Problem Statement
 
 BGP can remain operational while its route decisions become insecure or unintended. A session-up alarm does not explain whether a monitored prefix is being originated by the expected AS or whether an unexpected AS path has appeared.
 
@@ -20,7 +31,7 @@ The engineering question for this lab was:
 
 > Can a small multi-AS EVE-NG topology continuously collect BGP route state, apply explicit security expectations, detect prefix hijacking and route leaks, and present the results in an operational Kibana dashboard?
 
-## 2. Objectives
+## 2. Project Objectives
 
 - Build a multi-AS BGP topology in EVE-NG.
 - Implement route-reflector-based iBGP in AS200.
@@ -33,18 +44,18 @@ The engineering question for this lab was:
 - Validate a route-leak condition.
 - Centralize time synchronization with Chrony on BGP-ELK.
 
-## 3. Topology and Roles
+## 3. System Architecture and Topology
 
-### AS100
+### AS100 — Legitimate Origin
 MAIN-INT-RTR is the primary monitored router and legitimate origin.
 
-### AS200
+### AS200 — Route-Reflector and Hijack Test Domain
 vIOS4 and vIOS3 act as route reflectors. vIOS7 and vIOS6 are route-reflector clients. vIOS7 is also the controlled prefix-hijack injector.
 
-### AS300
+### AS300 — External Observer
 vIOS8 is used as the external path/leak observer.
 
-### Monitoring
+### Monitoring and Analytics
 BGP-ELK at `192.168.20.11` provides Logstash, Elasticsearch, Kibana and Chrony/NTP.
 
 ### Verified networks
@@ -58,7 +69,7 @@ BGP-ELK at `192.168.20.11` provides Logstash, Elasticsearch, Kibana and Chrony/N
 | 192.168.20.0/24 | Lab services / ELK / NTP |
 | 10.158.47.0/24 | Management / upstream network |
 
-## 4. Security Model
+## 4. BGP Security Detection Model
 
 ### Prefix hijacking
 
@@ -84,7 +95,7 @@ An observed `200 100` path is classified as:
 
 `security.as_path_match = false`
 
-## 5. Cisco Configuration Highlights
+## 5. Network and Cisco Configuration
 
 MAIN-INT-RTR uses:
 
@@ -112,13 +123,13 @@ The controlled hijack is injected with:
 
 and withdrawn by removing that network statement and shutting the test loopback.
 
-## 6. Connectivity / NAT
+## 6. Connectivity, NAT and Management
 
 MAIN provides the management boundary between `192.168.20.0/24` and `10.158.47.0/24`. A route-map-based PAT policy excludes the management subnet from self-NAT and permits normal outbound traffic.
 
 The lab also required a Windows route for `192.168.20.0/24` via the MAIN management interface and an ICMP firewall exception on Windows for validation.
 
-## 7. BGP State Collection
+## 7. BGP State Collection and Normalization
 
 The MAIN collector uses SSH and parses `show ip bgp` output into JSON-lines objects such as:
 
@@ -145,7 +156,7 @@ Example validated records:
 {"router":"vIOS8","prefix":"100.100.100.0/24","as_path":"200 100","origin_as":"100","possible_route_leak":true}
 ```
 
-## 8. Logstash / Detection Pipelines
+## 8. Logstash Ingestion and Detection Pipelines
 
 The lab uses three functional pipelines:
 
@@ -169,7 +180,7 @@ Security enrichment adds fields such as:
 
 `security.event_type`
 
-## 9. Elasticsearch
+## 9. Elasticsearch Data Layer
 
 Elasticsearch cluster:
 
@@ -181,7 +192,7 @@ Node:
 
 The cluster runs as a single-node lab deployment. Route-state and syslog indices are queried from Kibana using the `bgp-*` data-view pattern.
 
-## 10. Kibana Dashboard
+## 10. Kibana Security Dashboard
 
 The final dashboard contains:
 
@@ -198,7 +209,7 @@ The final dashboard contains:
 
 Operational time windows use recent observations so repeated 60-second snapshots are not mistaken for separate simultaneous incidents.
 
-## 11. NTP / Chrony
+## 11. Time Synchronization
 
 BGP-ELK provides central time synchronization through Chrony and UDP/123.
 
@@ -214,7 +225,7 @@ and `ss -lunp | grep :123`.
 
 vIOS8 was observed synchronized to `192.168.20.11`. MAIN synchronization remained a separate unresolved lab issue.
 
-## 12. Validation Results
+## 12. Test Plan and Validation Results
 
 ### TC-01 — Baseline
 
@@ -286,7 +297,7 @@ Chrony was listening on UDP/123 and clients were visible.
 
 Result: **Passed**
 
-## 13. Troubleshooting Lessons
+## 13. Troubleshooting and Engineering Lessons
 
 ### SSH after router reload
 
@@ -300,7 +311,7 @@ Elasticsearch encountered a machine-learning native-code startup failure during 
 
 The management route and ICMP firewall policy had to be corrected before Windows could reach the lab management subnet.
 
-## 14. Limitations
+## 14. Limitations and Future Enhancements
 
 This is a deterministic, prefix-specific laboratory detector. It is not a production BGP security service.
 
@@ -312,13 +323,13 @@ The AS topology map uses synthetic lab display coordinates and is not a real Int
 
 The lab achieved its primary objective: a closed multi-AS BGP environment can continuously collect routing state, classify known anomalies and expose them in an operational dashboard.
 
-The most important live validation proved an end-to-end lifecycle from route change to analytics:
+The most important live validation proved an end-to-end lifecycle from route change to analytics and demonstrated that the monitoring pipeline can distinguish a legitimate origin from a controlled unauthorized origin:
 
 `Normal 0 -> Hijack 1 -> Withdraw 0`
 
 A persistent AS-path anomaly remained visible as an active route leak.
 
-## Appendix A — Key Commands
+## Appendix A — Key Verification Commands
 
 `show ip bgp`
 
@@ -346,7 +357,7 @@ A persistent AS-path anomaly remained visible as an active route leak.
 
 `ss -lunp | grep :123`
 
-## Appendix B — Security Handling
+## Appendix B — Credential Handling
 
 Passwords, Elasticsearch credentials, private keys and other secrets are redacted.
 
@@ -354,7 +365,7 @@ Rotate all lab credentials before reuse outside the original environment.
 
 Do not commit real production logs, private keys, passwords, tokens or other sensitive data.
 
-## Appendix C — Reproduction Order
+## Appendix C — Reproduction Procedure
 
 1. Power up the EVE-NG topology.
 2. Verify interface addressing and BGP sessions.
