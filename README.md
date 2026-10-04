@@ -6,8 +6,8 @@ A hands-on BGP security monitoring and anomaly-detection lab built with Cisco IO
 
 Detect and visualize two important BGP security conditions:
 
-1. Prefix hijacking - an unexpected AS originates a monitored prefix.
-2. Route leaks - an unexpected AS-path is observed for a monitored prefix.
+1. Prefix hijacking — an unexpected AS originates a monitored prefix.
+2. Route leaks — an unexpected AS-path is observed for a monitored prefix.
 
 ## Architecture
 
@@ -17,9 +17,9 @@ The lab also uses BGP-ELK as the central NTP/Chrony server.
 
 ## BGP domains
 
-- AS100 - MAIN-INT-RTR / legitimate origin
-- AS200 - iBGP route-reflector domain and hijack test domain
-- AS300 - external domain used for path/leak testing
+- AS100 — MAIN-INT-RTR / legitimate origin
+- AS200 — iBGP route-reflector domain and hijack test domain
+- AS300 — external domain used for path/leak testing
 
 ## Security tests
 
@@ -47,10 +47,16 @@ The Kibana dashboard includes:
 
 ## Repository contents
 
-- `report/` - annual project report in DOCX and PDF format
-- `assets/` - architecture, topology, dashboard, and validation figures
-- `configs/` - intentionally sanitized configuration area
-- `LINKEDIN_POST.md` - publication-ready LinkedIn draft
+- `config/` — sanitized Cisco, collection, Logstash and detection configuration reference
+- `detection-rules/` — detection logic overview
+- `scripts/` — collection/automation documentation
+- `lab/` — topology and device-role documentation
+- `dashboards/` — dashboard documentation
+- `assets/` — asset manifest for topology, architecture and dashboard evidence
+- `report/` — Markdown annual project report
+- `docs/` — architecture and authentication documentation
+- `PROJECT_PUBLICATION_STATUS.md` — publication checklist/status
+- `LINKEDIN_POST.md` — publication-ready LinkedIn draft
 
 ## Validation lifecycle
 
