@@ -2,104 +2,84 @@
 
 ## Scope
 
-This project is a lab repository. Authentication is designed so that credentials are supplied at runtime and are never committed to Git.
+This repository documents a closed BGP security lab. Credentials are runtime concerns and must not be committed to Git.
 
-## Components
+## Authentication components
 
-### 1. GitHub repository access
+### GitHub repository access
 
-Git operations are authenticated by the developer's GitHub credential/session outside the project code. The repository does not contain a GitHub password, PAT, SSH private key, or OAuth token.
+Git operations use the authenticated GitHub developer session outside the project code. No GitHub password, PAT, OAuth secret, or SSH private key is stored in the repository.
 
-### 2. Router access
+### Cisco router collection
 
-Collectors may need to authenticate to lab routers using SSH or a router API. The application should read the username and secret from environment variables or a local secret provider.
+The lab uses SSH-based BGP collection. The documented MAIN collector account is `bgpcollector`; its secret is intentionally redacted.
 
-Example environment contract:
-
-- `BGP_ROUTER_HOST`
-- `BGP_ROUTER_USER`
-- `BGP_ROUTER_PASSWORD` (local runtime only)
-
-A production-style deployment should prefer SSH keys or a managed secret store over plaintext passwords.
-
-### 3. Monitoring/backend APIs
-
-When the lab integrates with a monitoring or indexing service, the client sends a short-lived or scoped token using the provider's supported authorization header. Tokens must be supplied at runtime and excluded from logs.
-
-## Request flow
-
-### Router collection
+The expected flow is:
 
 ```
 Collector
-   │
-   │  1. Resolve endpoint
-   │  2. Load runtime credentials
-   │  3. Establish SSH/API session
-   ▼
-Router
-   │
-   │  4. Request BGP state
-   ▼
-Collector
-   │
-   │  5. Normalize response
-   │  6. Emit sanitized event
-   ▼
-Detection / storage
+  |
+  | load runtime SSH credentials
+  v
+MAIN / vIOS8
+  |
+  | execute BGP state command
+  v
+JSON-lines parser
+  |
+  v
+Logstash -> Elasticsearch
 ```
 
-### Backend API call
+For the vIOS8 collector, SSH compatibility options are documented in `config/README.md`. Runtime credentials must be injected outside Git.
+
+### Elasticsearch / Logstash
+
+The Logstash pipelines connect to Elasticsearch over HTTPS/TLS using the dedicated `bgp_logstash` writer account. The password is redacted. The CA is referenced from the local Logstash certificate path.
+
+The request flow is:
 
 ```
-Detector/Collector
-       │
-       │ load runtime token
-       ▼
-HTTPS client
-       │
-       │ Authorization: Bearer <runtime-token>
-       ▼
-Monitoring/API service
-       │
-       │ 2xx response / error
-       ▼
-Client validation + sanitized logging
+Logstash
+   |
+   | HTTPS + TLS validation
+   | authenticated writer account
+   v
+Elasticsearch
+   |
+   v
+bgp-* / bgp-routes-* indexes
 ```
 
 ## Credential lifecycle
 
-1. **Provision** — an operator stores a secret outside the Git repository.
-2. **Load** — the process reads the secret at startup or request time.
-3. **Use** — credentials are presented only to the target service over the appropriate secure protocol.
-4. **Redact** — logs and error messages must omit passwords, private keys, access tokens, and authorization headers.
-5. **Rotate** — revoke/replace secrets without changing committed source code.
+1. Provision secrets outside the repository.
+2. Load them only at runtime.
+3. Use encrypted transport where supported.
+4. Redact secrets from logs and telemetry.
+5. Rotate/revoke credentials before reuse outside the lab.
 
-## What must never be committed
+## Never commit
 
-- Passwords
-- API keys
-- Personal access tokens
+- Router passwords
+- Elasticsearch passwords
+- API keys or bearer tokens
 - OAuth client secrets
 - SSH private keys
-- Router enable secrets
+- TLS private keys
 - Production connection strings containing credentials
-- Session cookies
+- Company logs containing sensitive data
 
 ## Token handling rules
 
-- Prefer least-privilege scopes.
-- Prefer short-lived tokens where the provider supports them.
+- Prefer least-privilege accounts.
+- Prefer short-lived/scoped tokens where supported.
 - Keep TLS certificate validation enabled.
-- Never print an Authorization header.
-- Never persist access tokens in telemetry payloads.
-- Treat a leaked token as compromised: revoke/rotate it immediately.
+- Never log Authorization headers or passwords.
+- Never store credentials in dashboard exports.
+- Treat a leaked token/password as compromised and rotate it immediately.
 
-## Git authentication vs application authentication
-
-GitHub authentication used to push this repository is separate from credentials used by the lab's router/API collectors. The project code must not assume or reuse the GitHub session credential for runtime network access.
-
-## Example pattern
+## Example runtime pattern
 
 ```python
 import os
@@ -107,7 +87,7 @@ import os
 token = os.environ["MONITORING_API_TOKEN"]
 headers = {"Authorization": f"Bearer {token}"}
 
-# Send the request over HTTPS; do not log headers.
+# Perform the HTTPS request without logging the token or headers.
 ```
 
-The example intentionally leaves the HTTP client and endpoint provider unspecified so it can be adapted to the lab without hard-coding a service or secret.
+GitHub authentication and application/router authentication are separate trust boundaries.
