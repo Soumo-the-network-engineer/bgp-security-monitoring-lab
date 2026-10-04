@@ -66,10 +66,6 @@ The prefix-hijack scenario was validated end-to-end:
 
 The route-leak scenario was also validated with repeated observations of the suspicious AS path and a corresponding `possible_route_leak` classification.
 
-## Security note
-
-This repository is designed for public documentation. Do not commit real passwords, private SSH keys, certificates, API tokens, company logs, or other sensitive production data.
-
 ## Author
 
 Soumallya Das
