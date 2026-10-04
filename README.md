@@ -56,7 +56,6 @@ The Kibana dashboard includes:
 - `report/` — Markdown annual project report
 - `docs/` — architecture and authentication documentation
 - `PROJECT_PUBLICATION_STATUS.md` — publication checklist/status
-- `LINKEDIN_POST.md` — publication-ready LinkedIn draft
 
 ## Validation lifecycle
 
