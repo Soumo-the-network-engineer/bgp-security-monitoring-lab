@@ -1,7 +1,10 @@
 # Configuration
 
-Cisco BGP Configuration
-7.1 MAIN-INT-RTR Base Configuration
+Sanitized configuration reference for the BGP Security Monitoring Lab. Runtime credentials are redacted.
+
+## 7.1 MAIN-INT-RTR Base Configuration
+
+```cisco
 hostname MAIN-INT-RTR
 ip domain name bgp-lab.local
 username bgpcollector privilege 15 secret <LAB_PASSWORD_REDACTED>
@@ -45,8 +48,11 @@ logging host 192.168.20.10
 ntp source GigabitEthernet0/2.10
 ntp server 192.168.20.11 prefer
 
-The exact BGP neighbor statements were maintained in the live lab but were not fully preserved in the session excerpts used for this report. The report therefore does not invent missing interface IP values or neighbor addresses beyond the verified topology table.
-7.2 AS200 Router-Reflector Design
+```
+
+> The exact BGP neighbor statements were maintained in the live lab but were not fully preserved in the session excerpts used for this report. The report therefore does not invent missing interface IP values or neighbor addresses beyond the verified topology table.
+
+## 7.2 AS200 Router-Reflector Design
 AS200 uses vIOS4 and vIOS3 as RR nodes. vIOS7 and vIOS6 act as RR clients. The lab intentionally uses iBGP only inside AS200, with no dependency on a separate IGP for the demonstration. MAIN peers with vIOS7 over 10.10.10.0/24 and vIOS6 over 11.11.11.0/24.
 AS200 logical role summary
 -------------------------
@@ -59,7 +65,8 @@ Core route-reflector requirement:
 - Client sessions are marked as route-reflector-client on the RR nodes.
 - AS200 remains a single iBGP AS.
 
-7.3 vIOS7 Baseline and Hijack Test Configuration
+
+## 7.3 vIOS7 Baseline and Hijack Test Configuration
 interface Loopback100
  ip address 70.70.70.7 255.255.255.255
 !
@@ -84,19 +91,23 @@ interface Loopback200
  shutdown
 end
 
-7.4 vIOS8 Route-Leak Test
+
+## 7.4 vIOS8 Route-Leak Test
 vIOS8 is AS300 and receives the legitimate route from AS100 as path 100. The test also exposes an observed path 200 100, which is treated by the parser as a possible route leak.
 vIOS8 route-state parser output observed during validation:
 {"router":"vIOS8","prefix":"100.100.100.0/24","as_path":"100","origin_as":"100","possible_route_leak":false}
 {"router":"vIOS8","prefix":"100.100.100.0/24","as_path":"200 100","origin_as":"100","possible_route_leak":true}
 
-8. Connectivity, NAT and Management Network
-8.1 Management / Lab Route
+
+# 8. Connectivity, NAT and Management Network
+
+## 8.1 Management / Lab Route
 After the environment was moved to the 10.158.47.0/24 management network, Windows required a persistent route for the lab service subnet. The route used MAIN at 10.158.47.88 as the gateway for 192.168.20.0/24.
 Windows (Administrator CMD)
 route -p add 192.168.20.0 mask 255.255.255.0 10.158.47.88
 
-8.2 PAT Design
+
+## 8.2 PAT Design
 ip access-list extended BGPELK-NAT
  deny ip 192.168.20.0 0.0.0.255 10.158.47.0 0.0.0.255
  permit ip 192.168.20.0 0.0.0.255 any
@@ -107,7 +118,8 @@ route-map BGPELK-PAT permit 10
 ip nat inside source route-map BGPELK-PAT interface GigabitEthernet0/3 overload
 
 The deny statement prevents translation between the lab service subnet and the management subnet, while the permit statement allows Internet-bound lab traffic to use PAT. Rebuilding this policy restored cross-network connectivity during troubleshooting.
-8.3 DHCP Validation on MAIN Gi0/3
+
+## 8.3 DHCP Validation on MAIN Gi0/3
 show dhcp lease
 
 Temp IP addr: 10.158.47.88
@@ -117,19 +129,23 @@ Lease: 3599 secs, Renewal: 1799 secs, Rebind: 3149 secs
 Temp default-gateway addr: 10.158.47.93
 
 The DHCP lease was verified as bound, with zero DHCP conflicts and successful gateway ping tests. Therefore the later INTVULN software issue was not attributed to DHCP.
-8.4 Windows Firewall Resolution
+
+## 8.4 Windows Firewall Resolution
 A separate connectivity issue was traced to Windows firewall behavior. Traffic sourced from 192.168.20.1 could reach Windows only after a temporary inbound ICMP rule was added for the lab subnet. This confirmed that Cisco routing and DHCP were healthy and that the host firewall was the immediate blocker for that test.
 netsh advfirewall firewall add rule name="Allow ICMP from BGP Lab" dir=in action=allow protocol=icmpv4:8,any remoteip=192.168.20.0/24
 
-9. BGP State Collection
-9.1 MAIN Collector
+
+# 9. BGP State Collection
+
+## 9.1 MAIN Collector
 MAIN BGP state is collected over SSH from 192.168.20.1 using the bgpcollector local account. The collector invokes the IOS command show ip bgp and passes the result to a parser that emits one JSON object per route.
 Observed MAIN parser output examples:
 {"router":"MAIN-INT-RTR","prefix":"10.10.10.0/24","next_hop":"0.0.0.0","as_path":"","origin_as":"100","origin":"i","best":true}
 {"router":"MAIN-INT-RTR","prefix":"70.70.70.7/32","next_hop":"10.10.10.2","as_path":"200","origin_as":"200","origin":"i","best":true}
 {"router":"MAIN-INT-RTR","prefix":"100.100.100.0/24","next_hop":"0.0.0.0","as_path":"","origin_as":"100","origin":"i","best":true}
 
-9.2 vIOS8 Collector
+
+## 9.2 vIOS8 Collector
 SSH compatibility options used by get_vios8_bgp.sh:
 -o KexAlgorithms=+diffie-hellman-group14-sha1
 -o HostKeyAlgorithms=+ssh-rsa
@@ -139,14 +155,17 @@ SSH compatibility options used by get_vios8_bgp.sh:
 -o UserKnownHostsFile=/dev/null
 
 The vIOS8 collector is executed by Logstash and feeds a JSON-lines parser. File permissions were arranged so the logstash user could execute the collector.
-10. Logstash Pipelines and Detection Logic
-10.1 Pipeline Layout
+
+# 10. Logstash Pipelines and Detection Logic
+
+## 10.1 Pipeline Layout
 Pipeline ID	Config path	Purpose
 main	/etc/logstash/conf.d/*.conf	Cisco syslog on TCP/5514 -> bgp-%{+YYYY.MM.dd}
 route_state	/etc/logstash/routes/*.conf	MAIN BGP route-state collection and origin validation
 vios8_route	/etc/logstash/vios8/*.conf	vIOS8 route-state collection and AS-path validation
 
-10.2 Syslog Pipeline
+
+## 10.2 Syslog Pipeline
 input {
   tcp {
     id => "bgp_syslog_tcp"
@@ -176,7 +195,8 @@ output {
   stdout { codec => rubydebug }
 }
 
-10.3 Route-State Security Rules
+
+## 10.3 Route-State Security Rules
 Expected origin rules:
 10.10.10.0/24 -> 100
 11.11.11.0/24 -> 100
@@ -188,7 +208,8 @@ For each route:
 - mismatch      -> security.event_type = possible_prefix_hijack
                   tag = _possible_prefix_hijack
 
-10.4 vIOS8 AS-Path Detection Logic
+
+## 10.4 vIOS8 AS-Path Detection Logic
 For prefix 100.100.100.0/24:
 expected AS path = 100
 
@@ -196,7 +217,8 @@ AS path 100       -> normal_route / as_path_match=true
 AS path 200 100   -> possible_route_leak / as_path_match=false
 other paths       -> unknown_as_path
 
-10.5 Exact vIOS8 Pipeline Configuration
+
+## 10.5 Exact vIOS8 Pipeline Configuration
 input {
   exec {
     id => "vios8_bgp_route_collector"
@@ -252,7 +274,8 @@ output {
   stdout { codec => rubydebug }
 }
 
-10.6 Pipeline Registration
+
+## 10.6 Pipeline Registration
 - pipeline.id: vios8_route
   path.config: "/etc/logstash/vios8/*.conf"
 
@@ -262,20 +285,24 @@ output {
 - pipeline.id: main
   path.config: "/etc/logstash/conf.d/*.conf"
 
-11. Elasticsearch and Security Indexing
-11.1 Cluster Configuration
+
+# 11. Elasticsearch and Security Indexing
+
+## 11.1 Cluster Configuration
 cluster.name: bgp-security-lab
 node.name: BGP-ELK
 discovery.type: single-node
 http.host: 0.0.0.0
 
 Elasticsearch 9.5.4 was used. TLS was enabled and the Logstash CA was copied to /etc/logstash/certs/http_ca.crt. A dedicated bgp_logstash writer account was created with index privileges on bgp-* and cluster privileges sufficient to write route and syslog data. Credentials are deliberately redacted in this report.
-11.2 Index Families
+
+## 11.2 Index Families
 Index pattern	Content	Example fields
 bgp-YYYY.MM.dd	Cisco syslog	cisco.router_ip, cisco.message, cisco.syslog_timestamp, cisco.facility
 bgp-routes-YYYY.MM.dd	BGP route-state snapshots	router, prefix, origin_as, as_path, next_hop, best, security.*
 
-11.3 Example Detected Hijack Document
+
+## 11.3 Example Detected Hijack Document
 {
   "router": "MAIN-INT-RTR",
   "prefix": "100.100.100.0/24",
@@ -290,6 +317,7 @@ bgp-routes-YYYY.MM.dd	BGP route-state snapshots	router, prefix, origin_as, as_pa
   "tags": ["bgp_route", "_possible_prefix_hijack"]
 }
 
-11.4 Elasticsearch Startup Incident
+
+## 11.4 Elasticsearch Startup Incident
 During the lab, Elasticsearch once failed to start because the machine-learning native code crashed. The logs explicitly indicated that the ML native component was the failing subsystem and identified xpack.ml.enabled: false as the bypass. Disk space was not the cause; the node had tens of gigabytes free. The incident was treated as an infrastructure troubleshooting event rather than a BGP detection failure.
 
