@@ -1,8 +1,181 @@
+BGP SECURITY MONITORING LAB
+VALIDATION EVIDENCE
+====================
 
-root@BGP-ELK:~# curl -k -u elastic 'https://127.0.0.1:9200/bgp-routes-*/_search?size=10&sort=@timestamp:desc&q=router:MAIN-INT-RTR'
-Enter host password for user 'elastic':
-{"took":579,"timed_out":false,"_shards":{"total":4,"successful":4,"skipped":0,"failed":0},"hits":{"total":{"value":1162,"relation":"eq"},"max_score":null,"hits":[{"_index":"bgp-routes-2026.09.24","_id":"xUPM1aABFHZmkbUvQb6R","_score":null,"_source":{"router":"MAIN-INT-RTR","origin":"i","@version":"1","origin_as":"100","next_hop":"0.0.0.0","event":{"kind":"state","dataset":"bgp.routes"},"best":true,"@timestamp":"2026-09-24T23:42:08.160080747Z","host":{"name":"BGP-ELK"},"prefix":"11.11.11.0/24","tags":["bgp_route"],"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"security":{"origin_match":true,"expected_origin_as":"100","event_type":"normal_origin"},"as_path":""},"sort":[1790293328160]},{"_index":"bgp-routes-2026.09.24","_id":"xkPM1aABFHZmkbUvQb6R","_score":null,"_source":{"router":"MAIN-INT-RTR","origin":"i","@version":"1","origin_as":"100","next_hop":"0.0.0.0","event":{"kind":"state","dataset":"bgp.routes"},"best":true,"@timestamp":"2026-09-24T23:42:08.160963212Z","host":{"name":"BGP-ELK"},"prefix":"100.100.100.0/24","tags":["bgp_route"],"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"security":{"origin_match":true,"expected_origin_as":"100","event_type":"normal_origin"},"as_path":""},"sort":[1790293328160]},{"_index":"bgp-routes-2026.09.24","_id":"x0PM1aABFHZmkbUvQb6R","_score":null,"_source":{"router":"MAIN-INT-RTR","origin":"i","@version":"1","origin_as":"200","next_hop":"12.12.12.2","event":{"kind":"state","dataset":"bgp.routes"},"best":false,"@timestamp":"2026-09-24T23:42:08.160264999Z","host":{"name":"BGP-ELK"},"prefix":"70.70.70.7/32","tags":["bgp_route"],"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"security":{"origin_match":true,"expected_origin_as":"200","event_type":"normal_origin"},"as_path":"300 200"},"sort":[1790293328160]},{"_index":"bgp-routes-2026.09.24","_id":"yEPM1aABFHZmkbUvQb6R","_score":null,"_source":{"router":"MAIN-INT-RTR","origin":"i","@version":"1","origin_as":"200","next_hop":"11.11.11.2","event":{"kind":"state","dataset":"bgp.routes"},"best":false,"@timestamp":"2026-09-24T23:42:08.160529788Z","host":{"name":"BGP-ELK"},"prefix":"70.70.70.7/32","tags":["bgp_route"],"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"security":{"origin_match":true,"expected_origin_as":"200","event_type":"normal_origin"},"as_path":"200"},"sort":[1790293328160]},{"_index":"bgp-routes-2026.09.24","_id":"ykPM1aABFHZmkbUvQb6W","_score":null,"_source":{"router":"MAIN-INT-RTR","origin":"i","@version":"1","origin_as":"200","next_hop":"10.10.10.2","event":{"kind":"state","dataset":"bgp.routes"},"best":true,"@timestamp":"2026-09-24T23:42:08.160672857Z","host":{"name":"BGP-ELK"},"prefix":"70.70.70.7/32","tags":["bgp_route"],"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"security":{"origin_match":true,"expected_origin_as":"200","event_type":"normal_origin"},"as_path":"200"},"sort":[1790293328160]},{"_index":"bgp-routes-2026.09.24","_id":"yUPM1aABFHZmkbUvQb6W","_score":null,"_source":{"router":"MAIN-INT-RTR","origin":"i","@version":"1","origin_as":"100","next_hop":"0.0.0.0","event":{"kind":"state","dataset":"bgp.routes"},"best":true,"@timestamp":"2026-09-24T23:42:08.159656214Z","host":{"name":"BGP-ELK"},"prefix":"10.10.10.0/24","tags":["bgp_route"],"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"security":{"origin_match":true,"expected_origin_as":"100","event_type":"normal_origin"},"as_path":""},"sort":[1790293328159]},{"_index":"bgp-routes-2026.09.24","_id":"iUPL1aABFHZmkbUvWL5V","_score":null,"_source":{"router":"MAIN-INT-RTR","origin":"i","@version":"1","origin_as":"100","next_hop":"0.0.0.0","event":{"kind":"state","dataset":"bgp.routes"},"best":true,"@timestamp":"2026-09-24T23:41:08.415461044Z","host":{"name":"BGP-ELK"},"prefix":"100.100.100.0/24","tags":["bgp_route"],"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"security":{"origin_match":true,"expected_origin_as":"100","event_type":"normal_origin"},"as_path":""},"sort":[1790293268415]},{"_index":"bgp-routes-2026.09.24","_id":"jEPL1aABFHZmkbUvWL5V","_score":null,"_source":{"router":"MAIN-INT-RTR","origin":"i","@version":"1","origin_as":"200","next_hop":"10.10.10.2","event":{"kind":"state","dataset":"bgp.routes"},"best":true,"@timestamp":"2026-09-24T23:41:08.415188504Z","host":{"name":"BGP-ELK"},"prefix":"70.70.70.7/32","tags":["bgp_route"],"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"security":{"origin_match":true,"expected_origin_as":"200","event_type":"normal_origin"},"as_path":"200"},"sort":[1790293268415]},{"_index":"bgp-routes-2026.09.24","_id":"iEPL1aABFHZmkbUvWL5V","_score":null,"_source":{"router":"MAIN-INT-RTR","origin":"i","@version":"1","origin_as":"100","next_hop":"0.0.0.0","event":{"kind":"state","dataset":"bgp.routes"},"best":true,"@timestamp":"2026-09-24T23:41:08.409277890Z","host":{"name":"BGP-ELK"},"prefix":"11.11.11.0/24","tags":["bgp_route"],"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"security":{"origin_match":true,"expected_origin_as":"100","event_type":"normal_origin"},"as_path":""},"sort":[1790293268409]},{"_index":"bgp-routes-2026.09.24","_id":"ikPL1aABFHZmkbUvWL5V","_score":null,"_source":{"router":"MAIN-INT-RTR","origin":"i","@version":"1","origin_as":"200","next_hop":"12.12.12.2","event":{"kind":"state","dataset":"bgp.routes"},"best":false,"@timestamp":"2026-09-24T23:41:08.409657922Z","host":{"name":"BGP-ELK"},"prefix":"70.70.70.7/32","tags":["bgp_route"],"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"security":{"origin_match":true,"expected_origin_as":"200","event_type":"normal_origin"},"as_path":"300 200"},"sort":[1790293268409]}]}}root@curl -k -u elastic 'https://127.0.0.1:9200/bgp-routes-*/_search?size=10&sort=@timestamp:desc&q=security.event_type:possible_prefix_hijack'fix_hijack'
-Enter host password for user 'elastic':
-{"took":25,"timed_out":false,"_shards":{"total":4,"successful":4,"skipped":0,"failed":0},"hits":{"total":{"value":18,"relation":"eq"},"max_score":null,"hits":[{"_index":"bgp-routes-2026.09.24","_id":"OUMB1aABFHZmkbUvepGs","_score":null,"_source":{"host":{"name":"BGP-ELK"},"as_path":"200","security":{"origin_match":false,"event_type":"possible_prefix_hijack","expected_origin_as":"100"},"@version":"1","next_hop":"10.10.10.2","tags":["bgp_route","_possible_prefix_hijack"],"origin":"i","best":false,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"event":{"kind":"state","dataset":"bgp.routes"},"origin_as":"200","router":"MAIN-INT-RTR","prefix":"100.100.100.0/24","@timestamp":"2026-09-24T20:00:38.799371671Z"},"sort":[1790280038799]},{"_index":"bgp-routes-2026.09.24","_id":"NUMB1aABFHZmkbUvepGi","_score":null,"_source":{"host":{"name":"BGP-ELK"},"as_path":"200","security":{"origin_match":false,"event_type":"possible_prefix_hijack","expected_origin_as":"100"},"@version":"1","next_hop":"11.11.11.2","tags":["bgp_route","_possible_prefix_hijack"],"origin":"i","best":false,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"event":{"kind":"state","dataset":"bgp.routes"},"origin_as":"200","router":"MAIN-INT-RTR","prefix":"100.100.100.0/24","@timestamp":"2026-09-24T20:00:38.798927897Z"},"sort":[1790280038798]},{"_index":"bgp-routes-2026.09.24","_id":"BkMA1aABFHZmkbUvkJEk","_score":null,"_source":{"host":{"name":"BGP-ELK"},"as_path":"200","security":{"origin_match":false,"event_type":"possible_prefix_hijack","expected_origin_as":"100"},"@version":"1","next_hop":"11.11.11.2","tags":["bgp_route","_possible_prefix_hijack"],"origin":"i","best":false,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"event":{"kind":"state","dataset":"bgp.routes"},"origin_as":"200","router":"MAIN-INT-RTR","prefix":"100.100.100.0/24","@timestamp":"2026-09-24T19:59:38.797514617Z"},"sort":[1790279978797]},{"_index":"bgp-routes-2026.09.24","_id":"B0MA1aABFHZmkbUvkJEk","_score":null,"_source":{"host":{"name":"BGP-ELK"},"as_path":"200","security":{"origin_match":false,"event_type":"possible_prefix_hijack","expected_origin_as":"100"},"@version":"1","next_hop":"10.10.10.2","tags":["bgp_route","_possible_prefix_hijack"],"origin":"i","best":false,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"event":{"kind":"state","dataset":"bgp.routes"},"origin_as":"200","router":"MAIN-INT-RTR","prefix":"100.100.100.0/24","@timestamp":"2026-09-24T19:59:38.797943900Z"},"sort":[1790279978797]},{"_index":"bgp-routes-2026.09.24","_id":"1UP_1KABFHZmkbUvp5AB","_score":null,"_source":{"host":{"name":"BGP-ELK"},"as_path":"200","security":{"origin_match":false,"event_type":"possible_prefix_hijack","expected_origin_as":"100"},"@version":"1","next_hop":"10.10.10.2","tags":["bgp_route","_possible_prefix_hijack"],"origin":"i","best":false,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"event":{"kind":"state","dataset":"bgp.routes"},"origin_as":"200","router":"MAIN-INT-RTR","prefix":"100.100.100.0/24","@timestamp":"2026-09-24T19:58:38.900340859Z"},"sort":[1790279918900]},{"_index":"bgp-routes-2026.09.24","_id":"1EP_1KABFHZmkbUvp5AB","_score":null,"_source":{"host":{"name":"BGP-ELK"},"as_path":"200","security":{"origin_match":false,"event_type":"possible_prefix_hijack","expected_origin_as":"100"},"@version":"1","next_hop":"11.11.11.2","tags":["bgp_route","_possible_prefix_hijack"],"origin":"i","best":false,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"event":{"kind":"state","dataset":"bgp.routes"},"origin_as":"200","router":"MAIN-INT-RTR","prefix":"100.100.100.0/24","@timestamp":"2026-09-24T19:58:38.899418333Z"},"sort":[1790279918899]},{"_index":"bgp-routes-2026.09.24","_id":"pkP-1KABFHZmkbUvv5Ca","_score":null,"_source":{"host":{"name":"BGP-ELK"},"as_path":"200","security":{"origin_match":false,"event_type":"possible_prefix_hijack","expected_origin_as":"100"},"@version":"1","next_hop":"10.10.10.2","tags":["bgp_route","_possible_prefix_hijack"],"origin":"i","best":false,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"event":{"kind":"state","dataset":"bgp.routes"},"origin_as":"200","router":"MAIN-INT-RTR","prefix":"100.100.100.0/24","@timestamp":"2026-09-24T19:57:39.750210564Z"},"sort":[1790279859750]},{"_index":"bgp-routes-2026.09.24","_id":"okP-1KABFHZmkbUvv5CX","_score":null,"_source":{"host":{"name":"BGP-ELK"},"as_path":"200","security":{"origin_match":false,"event_type":"possible_prefix_hijack","expected_origin_as":"100"},"@version":"1","next_hop":"11.11.11.2","tags":["bgp_route","_possible_prefix_hijack"],"origin":"i","best":false,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"event":{"kind":"state","dataset":"bgp.routes"},"origin_as":"200","router":"MAIN-INT-RTR","prefix":"100.100.100.0/24","@timestamp":"2026-09-24T19:57:39.749346623Z"},"sort":[1790279859749]},{"_index":"bgp-routes-2026.09.24","_id":"cUP91KABFHZmkbUv0JBr","_score":null,"_source":{"host":{"name":"BGP-ELK"},"as_path":"200","security":{"origin_match":false,"event_type":"possible_prefix_hijack","expected_origin_as":"100"},"@version":"1","next_hop":"10.10.10.2","tags":["bgp_route","_possible_prefix_hijack"],"origin":"i","best":false,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"event":{"kind":"state","dataset":"bgp.routes"},"origin_as":"200","router":"MAIN-INT-RTR","prefix":"100.100.100.0/24","@timestamp":"2026-09-24T19:56:38.756038277Z"},"sort":[1790279798756]},{"_index":"bgp-routes-2026.09.24","_id":"dEP91KABFHZmkbUv0JCi","_score":null,"_source":{"host":{"name":"BGP-ELK"},"as_path":"200","security":{"origin_match":false,"event_type":"possible_prefix_hijack","expected_origin_as":"100"},"@version":"1","next_hop":"11.11.11.2","tags":["bgp_route","_possible_prefix_hijack"],"origin":"i","best":false,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_main_bgp.sh"},"event":{"kind":"state","dataset":"bgp.routes"},"origin_as":"200","router":"MAIN-INT-RTR","prefix":"100.100.100.0/24","@timestamp":"20curl -k -u elastic 'https://127.0.0.1:9200/bgp-routes-*/_search?size=10&sort=@timestamp:desc&q=security.event_type:possible_route_leak'h?size=10&sort=@timestamp:desc&q=security.event_type:possible_route_leak'
-Enter host password for user 'elastic':
-{"took":46,"timed_out":false,"_shards":{"total":4,"successful":4,"skipped":0,"failed":0},"hits":{"total":{"value":932,"relation":"eq"},"max_score":null,"hits":[{"_index":"bgp-routes-2026.10.03","_id":"9450A6EBs-DcWBj22g0p","_score":null,"_source":{"tags":["bgp_route","vios8_route","_possible_route_leak"],"host":{"name":"BGP-ELK"},"security":{"event_type":"possible_route_leak","as_path_match":"false","expected_as_path":"100"},"@version":"1","event":{"dataset":"bgp.routes","kind":"state"},"possible_route_leak":true,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_vios8_bgp.sh"},"as_path":"200 100","router":"vIOS8","prefix":"100.100.100.0/24","@timestamp":"2026-10-03T20:29:11.826926799Z","origin_as":"100"},"sort":[1791059351826]},{"_index":"bgp-routes-2026.10.03","_id":"m45zA6EBs-DcWBj2BA2m","_score":null,"_source":{"tags":["bgp_route","vios8_route","_possible_route_leak"],"host":{"name":"BGP-ELK"},"security":{"event_type":"possible_route_leak","as_path_match":"false","expected_as_path":"100"},"@version":"1","event":{"dataset":"bgp.routes","kind":"state"},"possible_route_leak":true,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_vios8_bgp.sh"},"as_path":"200 100","router":"vIOS8","prefix":"100.100.100.0/24","@timestamp":"2026-10-03T20:27:11.520205740Z","origin_as":"100"},"sort":[1791059231520]},{"_index":"bgp-routes-2026.10.03","_id":"b45yA6EBs-DcWBj2Gg0t","_score":null,"_source":{"tags":["bgp_route","vios8_route","_possible_route_leak"],"host":{"name":"BGP-ELK"},"security":{"event_type":"possible_route_leak","as_path_match":"false","expected_as_path":"100"},"@version":"1","event":{"dataset":"bgp.routes","kind":"state"},"possible_route_leak":true,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_vios8_bgp.sh"},"as_path":"200 100","router":"vIOS8","prefix":"100.100.100.0/24","@timestamp":"2026-10-03T20:26:11.767661501Z","origin_as":"100"},"sort":[1791059171767]},{"_index":"bgp-routes-2026.10.03","_id":"Lo5xA6EBs-DcWBj2Lw12","_score":null,"_source":{"tags":["bgp_route","vios8_route","_possible_route_leak"],"host":{"name":"BGP-ELK"},"security":{"event_type":"possible_route_leak","as_path_match":"false","expected_as_path":"100"},"@version":"1","event":{"dataset":"bgp.routes","kind":"state"},"possible_route_leak":true,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_vios8_bgp.sh"},"as_path":"200 100","router":"vIOS8","prefix":"100.100.100.0/24","@timestamp":"2026-10-03T20:25:11.675847768Z","origin_as":"100"},"sort":[1791059111675]},{"_index":"bgp-routes-2026.10.03","_id":"zI5vA6EBs-DcWBj2Wgzt","_score":null,"_source":{"tags":["bgp_route","vios8_route","_possible_route_leak"],"host":{"name":"BGP-ELK"},"security":{"event_type":"possible_route_leak","as_path_match":"false","expected_as_path":"100"},"@version":"1","event":{"dataset":"bgp.routes","kind":"state"},"possible_route_leak":true,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_vios8_bgp.sh"},"as_path":"200 100","router":"vIOS8","prefix":"100.100.100.0/24","@timestamp":"2026-10-03T20:23:11.526074931Z","origin_as":"100"},"sort":[1791058991526]},{"_index":"bgp-routes-2026.10.03","_id":"oI5uA6EBs-DcWBj2cAxK","_score":null,"_source":{"tags":["bgp_route","vios8_route","_possible_route_leak"],"host":{"name":"BGP-ELK"},"security":{"event_type":"possible_route_leak","as_path_match":"false","expected_as_path":"100"},"@version":"1","event":{"dataset":"bgp.routes","kind":"state"},"possible_route_leak":true,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_vios8_bgp.sh"},"as_path":"200 100","router":"vIOS8","prefix":"100.100.100.0/24","@timestamp":"2026-10-03T20:22:11.647903249Z","origin_as":"100"},"sort":[1791058931647]},{"_index":"bgp-routes-2026.10.03","_id":"c45tA6EBs-DcWBj2hgyp","_score":null,"_source":{"tags":["bgp_route","vios8_route","_possible_route_leak"],"host":{"name":"BGP-ELK"},"security":{"event_type":"possible_route_leak","as_path_match":"false","expected_as_path":"100"},"@version":"1","event":{"dataset":"bgp.routes","kind":"state"},"possible_route_leak":true,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_vios8_bgp.sh"},"as_path":"200 100","router":"vIOS8","prefix":"100.100.100.0/24","@timestamp":"2026-10-03T20:21:11.622333452Z","origin_as":"100"},"sort":[1791058871622]},{"_index":"bgp-routes-2026.10.03","_id":"OY5sA6EBs-DcWBj2nAyk","_score":null,"_source":{"tags":["bgp_route","vios8_route","_possible_route_leak"],"host":{"name":"BGP-ELK"},"security":{"event_type":"possible_route_leak","as_path_match":"false","expected_as_path":"100"},"@version":"1","event":{"dataset":"bgp.routes","kind":"state"},"possible_route_leak":true,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_vios8_bgp.sh"},"as_path":"200 100","router":"vIOS8","prefix":"100.100.100.0/24","@timestamp":"2026-10-03T20:20:11.856077582Z","origin_as":"100"},"sort":[1791058811856]},{"_index":"bgp-routes-2026.10.03","_id":"DY5rA6EBs-DcWBj2rww6","_score":null,"_source":{"tags":["bgp_route","vios8_route","_possible_route_leak"],"host":{"name":"BGP-ELK"},"security":{"event_type":"possible_route_leak","as_path_match":"false","expected_as_path":"100"},"@version":"1","event":{"dataset":"bgp.routes","kind":"state"},"possible_route_leak":true,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_vios8_bgp.sh"},"as_path":"200 100","router":"vIOS8","prefix":"100.100.100.0/24","@timestamp":"2026-10-03T20:19:11.162453944Z","origin_as":"100"},"sort":[1791058751162]},{"_index":"bgp-routes-2026.10.03","_id":"445qA6EBs-DcWBj2yAs-","_score":null,"_source":{"tags":["bgp_route","vios8_route","_possible_route_leak"],"host":{"name":"BGP-ELK"},"security":{"event_type":"possible_route_leak","as_path_match":"false","expected_as_path":"100"},"@version":"1","event":{"dataset":"bgp.routes","kind":"state"},"possible_route_leak":true,"process":{"exit_code":0,"command_line":"/usr/local/bin/parse_vios8_bgp.sh"},"as_path":"200 100","router":"vIOS8","prefix":"100.100.100.0/24","@timestamp":"2026-10-03T20:18:11.827036277Z","origin_as":"100"},"sort":[1791058691827]}]}}root@BGP-ELK:~#
+Purpose
+-------
+This file records representative Elasticsearch query results used to validate
+the BGP security monitoring pipeline in the laboratory environment.
+
+Environment
+-----------
+- Platform: EVE-NG / Cisco IOSv
+- Analytics host: BGP-ELK
+- Data store: Elasticsearch
+- Index family: bgp-routes-*
+- Monitored prefix: 100.100.100.0/24
+- Legitimate origin AS: 100
+- Controlled hijack origin AS: 200
+- External route observer: vIOS8 / AS300
+
+1. BASELINE BGP ROUTE VALIDATION
+--------------------------------
+
+Query objective:
+Verify that normal BGP observations are indexed and that the expected origin
+is correctly classified.
+
+Representative result:
+
+{
+  "router": "MAIN-INT-RTR",
+  "prefix": "100.100.100.0/24",
+  "origin_as": "100",
+  "security": {
+    "origin_match": true,
+    "expected_origin_as": "100",
+    "event_type": "normal_origin"
+  },
+  "best": true,
+  "tags": ["bgp_route"]
+}
+
+Interpretation:
+The monitored prefix is normally originated by AS100 and is classified as
+normal_origin because the observed origin matches the expected origin.
+
+2. PREFIX HIJACK VALIDATION
+---------------------------
+
+Test objective:
+Temporarily originate 100.100.100.0/24 from AS200 while AS100 remains the
+expected legitimate origin.
+
+Representative detection result:
+
+{
+  "router": "MAIN-INT-RTR",
+  "prefix": "100.100.100.0/24",
+  "origin_as": "200",
+  "as_path": "200",
+  "security": {
+    "origin_match": false,
+    "expected_origin_as": "100",
+    "event_type": "possible_prefix_hijack"
+  },
+  "tags": [
+    "bgp_route",
+    "_possible_prefix_hijack"
+  ]
+}
+
+Observed Elasticsearch result:
+- Matching documents: 18
+- Event type: possible_prefix_hijack
+- Expected origin: AS100
+- Observed origin: AS200
+- origin_match: false
+
+Interpretation:
+The monitoring pipeline successfully detected the controlled unauthorized
+origin and classified the observation as possible_prefix_hijack.
+
+Validation lifecycle:
+
+Normal state
+    |
+    v
+AS200 originates 100.100.100.0/24
+    |
+    v
+possible_prefix_hijack detected
+    |
+    v
+Dashboard metric increases: 0 -> 1
+    |
+    v
+Test route withdrawn
+    |
+    v
+Active hijack state returns to 0
+
+3. ROUTE-LEAK VALIDATION
+------------------------
+
+Test objective:
+Compare the expected AS path with the path observed by the external AS300
+observer.
+
+Expected path:
+
+100
+
+Observed suspicious path:
+
+200 100
+
+Representative detection result:
+
+{
+  "router": "vIOS8",
+  "prefix": "100.100.100.0/24",
+  "origin_as": "100",
+  "as_path": "200 100",
+  "possible_route_leak": true,
+  "security": {
+    "event_type": "possible_route_leak",
+    "as_path_match": "false",
+    "expected_as_path": "100"
+  },
+  "tags": [
+    "bgp_route",
+    "vios8_route",
+    "_possible_route_leak"
+  ]
+}
+
+Observed Elasticsearch result:
+- Event type: possible_route_leak
+- Expected AS path: 100
+- Observed AS path: 200 100
+- as_path_match: false
+- possible_route_leak: true
+- Router: vIOS8
+- Origin AS: 100
+
+Interpretation:
+The route-leak detection logic identified an unexpected intermediate AS in
+the observed path while retaining AS100 as the legitimate origin.
+
+4. VALIDATION SUMMARY
+---------------------
+
+| Test Case       | Expected             | Observed              | Result |
+|----------------|----------------------|-----------------------|--------|
+| Normal origin  | Origin AS100         | Origin AS100          | PASS   |
+| Prefix hijack  | Origin AS100         | Origin AS200          | PASS   |
+| Route leak     | AS path 100          | AS path 200 100       | PASS   |
+
+End-to-end validation confirms that the lab can:
+1. Collect BGP route state.
+2. Normalize routing observations.
+3. Compare observed values against expected security baselines.
+4. Classify abnormal origin and AS-path behavior.
+5. Index security events in Elasticsearch.
+6. Expose the resulting state to Kibana for visualization.
+
+5. REPRODUCIBILITY NOTES
+------------------------
+
+The evidence represents controlled laboratory tests. The Elasticsearch
+responses are representative observations captured during validation.
+
+Credentials are not included in this evidence file. Any authentication
+prompt shown in raw terminal history refers only to runtime access and does
+not disclose the associated secret.
+
+This evidence should be read together with:
+- config/README.md
+- detection-rules/README.md
+- dashboards/README.md
+- report/PROJECT_REPORT.md
