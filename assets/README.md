@@ -1,6 +1,6 @@
 # Project Assets
 
-The working project package contains these figures:
+The prepared project package contains these evidence figures:
 
 | File | Purpose |
 |---|---|
@@ -11,6 +11,6 @@ The working project package contains these figures:
 | dashboard_hijack_1.png | Active prefix-hijack dashboard state |
 | hijack_timeline.png | Hijack lifecycle evidence |
 
-The annual project report documents the figures and their validation context.
+The annual project report contains the figures and validation context.
 
-The report package also contains both DOCX and PDF versions in the local project bundle.
+See [BINARY_ARTIFACT_MANIFEST.md](BINARY_ARTIFACT_MANIFEST.md) for SHA-256 fingerprints of the prepared DOCX/PDF and extracted PNG artifacts.
