@@ -22,6 +22,16 @@ The lab also uses BGP-ELK as the central NTP/Chrony server.
 - AS300 — external domain used for path/leak testing
 
 
+## Security tests
+
+### Prefix hijacking
+
+The lab temporarily originated `100.100.100.0/24` from AS200 while AS100 remained the expected origin. The monitoring pipeline detected `possible_prefix_hijack` with `origin_match=false` and the dashboard changed from 0 to 1. After withdrawing the test route, the active hijack metric returned to 0 in the selected recent-observation window.
+
+### Route leak
+
+The vIOS8 collector compares the expected AS path `100` with an observed `200 100` path. The latter is tagged and classified as `possible_route_leak`.
+
 ## Dashboard
 
 The Kibana dashboard includes:
