@@ -23,7 +23,3 @@ Branch: `main`
 The prepared project bundle also contains the annual-report DOCX/PDF and PNG evidence figures. They were inspected during this publication recheck and contain redacted credentials.
 
 Binary artifact publication requires a binary-capable GitHub upload path; the current GitHub connector exposes repository text/blob operations but no direct local-file upload operation. The repository therefore does not claim those binary files are present until they are actually visible in the remote tree.
-
-## Security rule
-
-Never publish real passwords, API tokens, private SSH keys, certificates, company logs, or other sensitive production material.
