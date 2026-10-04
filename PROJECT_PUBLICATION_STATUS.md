@@ -15,7 +15,6 @@ Branch: `main`
 - Architecture and authentication documentation
 - Annual project report in Markdown
 - Project asset manifest
-- LinkedIn publication draft
 - Secret-safe `.gitignore`
 
 ## Prepared binary artifacts
