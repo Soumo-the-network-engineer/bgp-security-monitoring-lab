@@ -54,12 +54,14 @@ ntp server 192.168.20.11 prefer
 
 ## 7.2 AS200 Router-Reflector Design
 AS200 uses vIOS4 and vIOS3 as RR nodes. vIOS7 and vIOS6 act as RR clients. The lab intentionally uses iBGP only inside AS200, with no dependency on a separate IGP for the demonstration. MAIN peers with vIOS7 over 10.10.10.0/24 and vIOS6 over 11.11.11.0/24.
-AS200 logical role summary
--------------------------
-vIOS4 = RR1
-vIOS3 = RR2
-vIOS7 = RR1 client + prefix-hijack injector
-vIOS6 = RR2 client
+### AS200 logical role summary
+
+| Node | Role |
+|---|---|
+| vIOS4 | RR1 |
+| vIOS3 | RR2 |
+| vIOS7 | RR1 client + prefix-hijack injector |
+| vIOS6 | RR2 client |
 
 Core route-reflector requirement:
 - Client sessions are marked as route-reflector-client on the RR nodes.
@@ -67,13 +69,20 @@ Core route-reflector requirement:
 
 
 ## 7.3 vIOS7 Baseline and Hijack Test Configuration
+
+### Baseline
+
+```cisco
 interface Loopback100
  ip address 70.70.70.7 255.255.255.255
 !
 router bgp 200
  network 70.70.70.7 mask 255.255.255.255
+```
 
-Controlled prefix-hijack injection
+### Controlled prefix-hijack injection
+
+```cisco
 conf t
 interface Loopback200
  ip address 100.100.100.254 255.255.255.0
@@ -81,8 +90,11 @@ interface Loopback200
 router bgp 200
  network 100.100.100.0 mask 255.255.255.0
 end
+```
 
-Controlled prefix-hijack withdrawal
+### Controlled prefix-hijack withdrawal
+
+```cisco
 conf t
 router bgp 200
  no network 100.100.100.0 mask 255.255.255.0
@@ -90,13 +102,19 @@ exit
 interface Loopback200
  shutdown
 end
+```
 
 
 ## 7.4 vIOS8 Route-Leak Test
-vIOS8 is AS300 and receives the legitimate route from AS100 as path 100. The test also exposes an observed path 200 100, which is treated by the parser as a possible route leak.
-vIOS8 route-state parser output observed during validation:
+
+vIOS8 is **AS300** and receives the legitimate route from AS100 as path `100`. The test also exposes an observed path `200 100`, which is treated by the parser as a possible route leak.
+
+### Observed parser output
+
+```json
 {"router":"vIOS8","prefix":"100.100.100.0/24","as_path":"100","origin_as":"100","possible_route_leak":false}
 {"router":"vIOS8","prefix":"100.100.100.0/24","as_path":"200 100","origin_as":"100","possible_route_leak":true}
+```
 
 
 # 8. Connectivity, NAT and Management Network
